@@ -1,0 +1,36 @@
+---------------- SSH client to the remote EC2 instance ----------------
+
+1. sudo apt-get update
+
+2. Then for running multiple services of docker and we want to run it through by a single file and run simultaneously so there we have docker-compose.yml
+// sudo apt-get install docker.io docker-compose 
+
+3. Now we need to give the permissions to the docker and append it into the docker group;  
+// sudo usermod -aG docker $USER
+
+4. Then just refersh the docker group
+// newgrp docker
+
+5. ubuntu@ip-172-31-3-251:~$ docker compose version
+Docker Compose version 2.40.3+ds1-0ubuntu1
+ubuntu@ip-172-31-3-251:~$ docker --version
+Docker version 29.1.3, build 29.1.3-0ubuntu4.1
+
+6. Before we run the ./start.sh shell file we need to set this as an ENV variable in our EC2 system :- 
+// export PUBLIC_HOST=3.110.118.143 (EC2 Public IPv4 Address)
+// And we can see all the variable there as well by below command
+// printenv 
+// Then run shell file
+// ./start.sh
+
+7. After spining up the containers on EC2 instance now we need to add inbound rules for EC2 instance in the security group
+// 3000 port; for Elastiflix Frontend; Source type: Anywhere-IPv4
+// 5601 port; for Kibana; Source type: My IP
+// 9200 port; for ElasticSearch; Source type: My IP
+// 17700 port; for Elastiflix Backend; Source type: Anywhere-IPv4
+
+8. Then copy the IPv4 address of the EC2 instance and access via it for the frontend app running on port: 3000 and backend on port: 17700
+// e.g. http://15.206.210.132:3000
+// http://15.206.210.132:17700
+
+----------------------------------------------------------------------

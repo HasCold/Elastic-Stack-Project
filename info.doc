@@ -1,0 +1,50 @@
+------------------------ ELK Stack -------------------------
+
+- Why we need ELK Stack ?
+- Suppose there is 6000 movies in our DB jahan let suppose humne ye search krna ha ke batman movie tu technically hame har rows ko scan krta ha.
+
+- SELECT * FROM MOVIES WHEN NAME = ""%batman%;
+- There is one problem here when the data size grows eventually so the response time will also grown as well.
+- Response time = also grows
+
+Elastic Company made a solution: Elastic Stack
+
+-----------------  Elastic Search -------------------
+- We will start indexing the data.
+
+Indexing Data
+Batman
+2008
+
+- So they developed Elastic Search tool.
+- Where it indexed the data in JSON format so the retrieval, search or scanning process will be fast.  
+
+-------------------------------------------------------
+
+------------------------ Logstash ------------------------
+
+- So when the application evolve technically the logs will be increase more
+- and Logstash data will be saved in to the Elastic Search 
+(Logstash -> ElasticSearch ES)  
+
+-------------------------------------------------------
+
+---------------- Kibana (Display or Visualization tool) -----------------
+
+- And Kibana is one of the most popular log exploration and dashboard tools, but other platforms like Grafana, Splunk, and Datadog 
+- Logstash -> ElasticSearch (ES) -> Kibana
+
+-------------------------------------------------------
+
+---------------- Beats -----------------
+
+- New Update or Feature in Beats: Elastic Agents
+- What Beats would do: Captures the containers, VMs, file system RAM, CPU, Network Latency.  
+
+- Metrics: RAM, CPU, Files Uploaded, Network access
+- Beats -> Logstash -> ElasticSearch (ES) -> Kibana
+ 
+
+-------------------------------------------------------
+
+- So ELK Stack is the old one and we have now Elastic Stack.

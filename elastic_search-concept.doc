@@ -1,0 +1,189 @@
+Yes. Think of an **Elasticsearch document** as basically **one JSON object representing one piece of data**.
+
+If you're coming from PostgreSQL/MySQL, the easiest analogy is:
+
+> **Elasticsearch Document ≈ Database Row**
+
+### Example
+
+Suppose you have a `users` table in PostgreSQL:
+
+| id | name  | email                                         | age |
+| -- | ----- | --------------------------------------------- | --- |
+| 1  | Hasan | [hasan@example.com](mailto:hasan@example.com) | 25  |
+
+In Elasticsearch, the same data could be stored as a **document**:
+
+```json
+{
+  "id": 1,
+  "name": "Hasan",
+  "email": "hasan@example.com",
+  "age": 25
+}
+```
+
+That JSON object is **one document**.
+
+---
+
+### How the concepts map
+
+If you're familiar with SQL:
+
+| SQL / PostgreSQL | Elasticsearch           |
+| ---------------- | ----------------------- |
+| Database         | Elasticsearch cluster   |
+| Table            | Index                   |
+| Row              | **Document**            |
+| Column           | Field                   |
+| Primary key      | `_id`                   |
+| SQL query        | Elasticsearch Query DSL |
+
+So you might have an index called:
+
+```text
+users
+```
+
+And inside it:
+
+```text
+Document 1
+{
+  "name": "Hasan",
+  "age": 25
+}
+
+Document 2
+{
+  "name": "Ali",
+  "age": 30
+}
+
+Document 3
+{
+  "name": "Ahmed",
+  "age": 28
+}
+```
+
+The `users` index therefore contains multiple documents.
+
+---
+
+### Where Kibana comes in
+
+**Kibana is not where the data fundamentally lives.** Elasticsearch stores the documents.
+
+Kibana is basically a UI/tool that lets you:
+
+* search Elasticsearch
+* inspect documents
+* create dashboards
+* create visualizations
+* analyze logs
+* run queries
+
+For example, in Kibana you might see:
+
+```text
+Index: users
+
+------------------------------------------------
+_id       name       age       email
+------------------------------------------------
+abc123    Hasan      25        hasan@gmail.com
+def456    Ali        30        ali@gmail.com
+ghi789    Ahmed      28        ahmed@gmail.com
+```
+
+Each row you're seeing there represents an **Elasticsearch document**.
+
+### A more practical example with logs
+
+This is where Elasticsearch becomes especially useful.
+
+Suppose your Go application generates this log:
+
+```json
+{
+  "timestamp": "2026-09-29T12:00:00Z",
+  "service": "payment-api",
+  "level": "error",
+  "message": "Payment failed",
+  "payment_id": "pay_123",
+  "status_code": 500
+}
+```
+
+That entire JSON object can be **one Elasticsearch document**.
+
+Then another request generates another document:
+
+```json
+{
+  "timestamp": "2026-09-29T12:01:00Z",
+  "service": "payment-api",
+  "level": "info",
+  "message": "Payment successful",
+  "payment_id": "pay_124",
+  "status_code": 200
+}
+```
+
+Now Elasticsearch has two documents.
+
+Kibana can then let you search things like:
+
+```text
+service:"payment-api" AND level:"error"
+```
+
+and show you all the error documents.
+
+---
+
+### One important difference from SQL
+
+An Elasticsearch document **doesn't have to follow a rigid table-row structure in the same way SQL does**.
+
+For example:
+
+```json
+{
+  "user": {
+    "name": "Hasan",
+    "age": 25
+  },
+  "orders": [
+    {
+      "id": "ORD-1",
+      "amount": 5000
+    },
+    {
+      "id": "ORD-2",
+      "amount": 3000
+    }
+  ]
+}
+```
+
+That's still **one document**.
+
+So you can think of Elasticsearch as:
+
+```text
+Elasticsearch
+   │
+   └── Index: payments
+          │
+          ├── Document 1 → JSON
+          ├── Document 2 → JSON
+          ├── Document 3 → JSON
+          └── Document 4 → JSON
+```
+
+And **Kibana sits on top of Elasticsearch** to help you explore and visualize those documents.
+
+If you're setting up the **ELK stack on your EC2**, the next important concept to understand is **Index → Document → Field → Mapping → Shard**, because these five things explain most of how Elasticsearch actually stores and searches your data.
